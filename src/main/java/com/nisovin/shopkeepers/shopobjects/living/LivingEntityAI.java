@@ -237,10 +237,12 @@ public class LivingEntityAI {
 				boolean gravityActive = this.isGravityActive();
 				int gravityChunkRange = Math.max(Settings.gravityChunkRange, 0);
 				for (Player player : Bukkit.getOnlinePlayers()) {
-					Chunk centerChunk = player.getLocation(tempLocation).getChunk();
-					this.activateNearbyChunks(centerChunk, AI_ACTIVATION_CHUNK_RANGE, ActivationType.AI);
-					if (gravityActive) {
-						this.activateNearbyChunks(centerChunk, gravityChunkRange, ActivationType.GRAVITY);
+					if (player.getWorld().isChunkLoaded((int) Math.floor(tempLocation.getY() / 16.0D), (int) Math.floor(tempLocation.getX() / 16.0D))) {
+						Chunk centerChunk = player.getLocation(tempLocation).getChunk();
+						this.activateNearbyChunks(centerChunk, AI_ACTIVATION_CHUNK_RANGE, ActivationType.AI);
+						if (gravityActive) {
+							this.activateNearbyChunks(centerChunk, gravityChunkRange, ActivationType.GRAVITY);
+						}
 					}
 				}
 				activationTimings.stop();
